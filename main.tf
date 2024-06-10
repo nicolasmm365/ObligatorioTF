@@ -14,8 +14,8 @@ resource "aws_vpc" "vpc_obligatorio" {
 }
 
 
-resource "aws_security_group" "tf_sg_obligatorio" {
-  name = "tf_sg_obligatorio"
+resource "aws_security_group" "tf_sg_lb_obligatorio" {
+  name = "tf_sg_lb_obligatorio"
   vpc_id = aws_vpc.vpc_obligatorio.id
   ingress {
     from_port   = 80
@@ -36,7 +36,53 @@ resource "aws_security_group" "tf_sg_obligatorio" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = "tf_sg_obligatorio"
+    Name = "tf_sg_lb_obligatorio"
+  }
+}
+
+resource "aws_security_group" "tf_sg_appweb_obligatorio" {
+  name = "tf_sg_appweb_obligatorio"
+  vpc_id = aws_vpc.vpc_obligatorio.id
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    security_groups  = [aws_security_group.tf_sg_lb_obligatorio.id]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "tf_sg_appweb_obligatorio"
+  }
+}
+
+resource "aws_security_group" "tf_sg_mysql_obligatorio" {
+  name        = "tf_sg_mysql_obligatorio"
+  description = "Security group MySQL"
+  vpc_id      = aws_vpc.vpc_obligatorio.id
+
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    security_groups  = [aws_security_group.tf_sg_appweb_obligatorio.id]
+  }
+}
+
+resource "aws_security_group" "tf_sg_efs_obligatorio" {
+  name        = "tf_sg_efs_obligatorio"
+  description = "Security group EFS"
+  vpc_id      = aws_vpc.vpc_obligatorio.id
+
+  ingress {
+    from_port   = 2049
+    to_port     = 2049
+    protocol    = "tcp"
+    security_groups  = [aws_security_group.tf_sg_appweb_obligatorio.id]
   }
 }
 
@@ -104,7 +150,7 @@ resource "aws_lb" "obligatorio_alb" {
   name               = "obligatorio-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.tf_sg_obligatorio.id]
+  security_groups    = [aws_security_group.tf_sg_lb_obligatorio.id]
   subnets            = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id]
 
   tags = {
@@ -194,7 +240,7 @@ resource "aws_db_instance" "obligatorio-db" {
   username             = "admin"
   password             = "password"
   skip_final_snapshot  = true
-
+  vpc_security_group_ids = [aws_security_group.tf_sg_mysql_obligatorio.id]
   db_subnet_group_name = aws_db_subnet_group.obligatorio_db_subnet_group.name
 
   tags = {
@@ -205,7 +251,7 @@ resource "aws_db_instance" "obligatorio-db" {
 # Provisionar las instancias de aplicación en las zonas de disponibilidad A y B
 resource "aws_instance" "app01" {
   ami           = "ami-02aead0a55359d6ec"
-  vpc_security_group_ids = [aws_security_group.tf_sg_obligatorio.id]
+  vpc_security_group_ids = [aws_security_group.tf_sg_appweb_obligatorio.id]
   instance_type = "t2.micro"
   key_name	= "vockey"
   associate_public_ip_address = true
@@ -244,6 +290,11 @@ resource "aws_instance" "app01" {
     define('DB_PASSWORD', '${aws_db_instance.obligatorio-db.password}');
     define('DB_DATABASE', '${aws_db_instance.obligatorio-db.name}');
 ?>%",
+      # En caso de que falle la creacion del archivo, podemos usar los siguientes comandos para copiarlo
+      #provisioner "file" {
+      # source      = "repo/config.php"
+      # destination = "/var/www/html/config.php"
+      #}
       "sudo yum install php-mysql.x86_64",
       "sudo yum install mariadb.x86_64",
       "mysql -h ${aws_db_instance.obligatorio-db.endpoint} -u ${aws_db_instance.obligatorio-db.username} -p${aws_db_instance.obligatorio-db.password} ${aws_db_instance.obligatorio-db.name} < /var/www/html/dump.sql",
@@ -254,7 +305,7 @@ resource "aws_instance" "app01" {
 
 resource "aws_instance" "app02" {
   ami           = "ami-02aead0a55359d6ec"
-  vpc_security_group_ids = [aws_security_group.tf_sg_obligatorio.id]
+  vpc_security_group_ids = [aws_security_group.tf_sg_appweb_obligatorio.id]
   instance_type = "t2.micro"
   key_name	= "vockey"
   subnet_id     = aws_subnet.subnet_b.id
@@ -297,4 +348,26 @@ resource "aws_instance" "app02" {
       "sudo systemctl restart httpd"
     ]
   }
+}
+
+resource "aws_efs_file_system" "efs_obligatorio" {
+  creation_token = "FileSystem"
+
+  tags = {
+    Name = "FileSystem"
+  }
+}
+
+resource "aws_efs_backup_policy" "backup_policy" {
+  file_system_id = aws_efs_file_system.efs_obligatorio.id
+
+  backup_policy {
+    status = "ENABLED"
+  }
+}
+
+resource "aws_efs_mount_target" "efs_mount" {
+  file_system_id = aws_efs_file_system.efs_obligatorio.id
+  subnet_id     = aws_subnet.subnet_b.id
+  security_groups = [aws_security_group.tf_sg_efs_obligatorio.id]
 }
