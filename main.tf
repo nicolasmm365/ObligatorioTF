@@ -360,7 +360,9 @@ resource "aws_efs_file_system" "efs_obligatorio" {
 
 resource "aws_efs_backup_policy" "backup_policy" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
-
+  # Aplicar la policy solo a la carpeta que contiene los backups
+  lifecycle_policy {
+    transition_to_ia = "AFTER_30_DAYS"
   backup_policy {
     status = "ENABLED"
   }
@@ -369,5 +371,11 @@ resource "aws_efs_backup_policy" "backup_policy" {
 resource "aws_efs_mount_target" "efs_mount" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
   subnet_id     = aws_subnet.subnet_b.id
+  security_groups = [aws_security_group.tf_sg_efs_obligatorio.id]
+}
+
+resource "aws_efs_mount_target" "efs_mount" {
+  file_system_id = aws_efs_file_system.efs_obligatorio.id
+  subnet_id     = aws_subnet.subnet_a.id
   security_groups = [aws_security_group.tf_sg_efs_obligatorio.id]
 }
