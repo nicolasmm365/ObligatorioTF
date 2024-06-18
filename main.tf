@@ -260,10 +260,21 @@ resource "aws_instance" "app01" {
     Name = "app01"
     terraform = "True"
   }
-
   depends_on = [aws_db_instance.obligatorio-db]
-
- connection {
+ # Contenido de config.php
+ #<?php
+	#ini_set('display_errors',1);
+	#error_reporting(-1);
+#	define('DB_HOST', '${aws_db_instance.obligatorio-db.endpoint}');
+ #   define('DB_USER', '${aws_db_instance.obligatorio-db.username}');
+  #  define('DB_PASSWORD', '${aws_db_instance.obligatorio-db.password}');
+   # define('DB_DATABASE', '${aws_db_instance.obligatorio-db.name}');
+#?>%",
+  provisioner "file" {
+    source      = "repo/config.php"
+    destination = "/var/www/html/config.php"
+    }
+  connection {
     type     = "ssh"
     user     = "ec2-user"
     host     = self.public_ip
@@ -281,20 +292,7 @@ resource "aws_instance" "app01" {
       "sudo systemctl start httpd",
       "git clone https://github.com/ORT-FI-7417-SolucionesCloud/php-ecommerce-obligatorio.git",
       "cp -r php-ecommerce-obligatorio/* /var/www/html/",
-      "sudo vim /var/www/html/config.php"
-      "<?php
-	ini_set('display_errors',1);
-	error_reporting(-1);
-	define('DB_HOST', '${aws_db_instance.obligatorio-db.endpoint}');
-    define('DB_USER', '${aws_db_instance.obligatorio-db.username}');
-    define('DB_PASSWORD', '${aws_db_instance.obligatorio-db.password}');
-    define('DB_DATABASE', '${aws_db_instance.obligatorio-db.name}');
-?>%",
-      # En caso de que falle la creacion del archivo, podemos usar los siguientes comandos para copiarlo
-      #provisioner "file" {
-      # source      = "repo/config.php"
-      # destination = "/var/www/html/config.php"
-      #}
+      "sudo vim /var/www/html/config.php",
       "sudo yum install php-mysql.x86_64",
       "sudo yum install mariadb.x86_64",
       "mysql -h ${aws_db_instance.obligatorio-db.endpoint} -u ${aws_db_instance.obligatorio-db.username} -p${aws_db_instance.obligatorio-db.password} ${aws_db_instance.obligatorio-db.name} < /var/www/html/dump.sql",
@@ -314,8 +312,20 @@ resource "aws_instance" "app02" {
     Name = "app02"
     terraform = "True"
   }
-
- connection {
+  # Contenido de config.php
+ #<?php
+	#ini_set('display_errors',1);
+	#error_reporting(-1);
+#	define('DB_HOST', '${aws_db_instance.obligatorio-db.endpoint}');
+ #   define('DB_USER', '${aws_db_instance.obligatorio-db.username}');
+  #  define('DB_PASSWORD', '${aws_db_instance.obligatorio-db.password}');
+   # define('DB_DATABASE', '${aws_db_instance.obligatorio-db.name}');
+#?>%",
+  provisioner "file" {
+    source      = "repo/config.php"
+    destination = "/var/www/html/config.php"
+  }
+  connection {
     type     = "ssh"
     user     = "ec2-user"
     host     = self.public_ip
@@ -334,15 +344,7 @@ resource "aws_instance" "app02" {
       "sudo systemctl start httpd",
       "git clone https://github.com/ORT-FI-7417-SolucionesCloud/php-ecommerce-obligatorio.git",
       "cp -r php-ecommerce-obligatorio/* /var/www/html/",
-      "sudo vim /var/www/html/config.php"
-      "<?php
-	ini_set('display_errors',1);
-	error_reporting(-1);
-	define('DB_HOST', '${aws_db_instance.obligatorio-db.endpoint}');
-    define('DB_USER', '${aws_db_instance.obligatorio-db.username}');
-    define('DB_PASSWORD', '${aws_db_instance.obligatorio-db.password}');
-    define('DB_DATABASE', '${aws_db_instance.obligatorio-db.name}');
-?>%",
+      "sudo vim /var/www/html/config.php",
       "sudo yum install php-mysql.x86_64",
       "sudo yum install mariadb.x86_64",
       "sudo systemctl restart httpd"
@@ -363,18 +365,19 @@ resource "aws_efs_backup_policy" "backup_policy" {
   # Aplicar la policy solo a la carpeta que contiene los backups
   lifecycle_policy {
     transition_to_ia = "AFTER_30_DAYS"
+  }
   backup_policy {
     status = "ENABLED"
   }
 }
 
-resource "aws_efs_mount_target" "efs_mount" {
+resource "aws_efs_mount_target" "efs_mount_b" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
   subnet_id     = aws_subnet.subnet_b.id
   security_groups = [aws_security_group.tf_sg_efs_obligatorio.id]
 }
 
-resource "aws_efs_mount_target" "efs_mount" {
+resource "aws_efs_mount_target" "efs_mount_a" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
   subnet_id     = aws_subnet.subnet_a.id
   security_groups = [aws_security_group.tf_sg_efs_obligatorio.id]
