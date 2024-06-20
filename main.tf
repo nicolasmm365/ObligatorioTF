@@ -290,8 +290,8 @@ resource "aws_instance" "app01" {
       "sudo yum install httpd git",
       "sudo systemctl enable httpd",
       "sudo systemctl start httpd",
-      "git clone https://github.com/ORT-FI-7417-SolucionesCloud/php-ecommerce-obligatorio.git",
-      "cp -r php-ecommerce-obligatorio/* /var/www/html/",
+      "git clone https://github.com/adandrea8/php-ecommerce",
+      "cp -r php-ecommerce/* /var/www/html/",
       "sudo vim /var/www/html/config.php",
       "sudo yum install php-mysql.x86_64",
       "sudo yum install mariadb.x86_64",
@@ -342,8 +342,8 @@ resource "aws_instance" "app02" {
       "sudo yum install httpd git",
       "sudo systemctl enable httpd",
       "sudo systemctl start httpd",
-      "git clone https://github.com/ORT-FI-7417-SolucionesCloud/php-ecommerce-obligatorio.git",
-      "cp -r php-ecommerce-obligatorio/* /var/www/html/",
+      "git clone https://github.com/adandrea8/php-ecommerce",
+      "cp -r php-ecommerce/* /var/www/html/",
       "sudo vim /var/www/html/config.php",
       "sudo yum install php-mysql.x86_64",
       "sudo yum install mariadb.x86_64",
@@ -354,7 +354,9 @@ resource "aws_instance" "app02" {
 
 resource "aws_efs_file_system" "efs_obligatorio" {
   creation_token = "FileSystem"
-
+  lifecycle_policy {
+    transition_to_ia = "AFTER_30_DAYS"
+  }
   tags = {
     Name = "FileSystem"
   }
@@ -363,9 +365,7 @@ resource "aws_efs_file_system" "efs_obligatorio" {
 resource "aws_efs_backup_policy" "backup_policy" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
   # Aplicar la policy solo a la carpeta que contiene los backups
-  lifecycle_policy {
-    transition_to_ia = "AFTER_30_DAYS"
-  }
+
   backup_policy {
     status = "ENABLED"
   }
