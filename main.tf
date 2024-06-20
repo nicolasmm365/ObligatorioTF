@@ -23,12 +23,7 @@ resource "aws_security_group" "tf_sg_lb_obligatorio" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -43,6 +38,12 @@ resource "aws_security_group" "tf_sg_lb_obligatorio" {
 resource "aws_security_group" "tf_sg_appweb_obligatorio" {
   name = "tf_sg_appweb_obligatorio"
   vpc_id = aws_vpc.vpc_obligatorio.id
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   ingress {
     from_port   = 80
     to_port     = 80
@@ -261,19 +262,7 @@ resource "aws_instance" "app01" {
     terraform = "True"
   }
   depends_on = [aws_db_instance.obligatorio-db]
- # Contenido de config.php
- #<?php
-	#ini_set('display_errors',1);
-	#error_reporting(-1);
-#	define('DB_HOST', '${aws_db_instance.obligatorio-db.endpoint}');
- #   define('DB_USER', '${aws_db_instance.obligatorio-db.username}');
-  #  define('DB_PASSWORD', '${aws_db_instance.obligatorio-db.password}');
-   # define('DB_DATABASE', '${aws_db_instance.obligatorio-db.name}');
-#?>%",
-  provisioner "file" {
-    source      = "repo/config.php"
-    destination = "/var/www/html/config.php"
-    }
+
   connection {
     type     = "ssh"
     user     = "ec2-user"
@@ -283,19 +272,20 @@ resource "aws_instance" "app01" {
   provisioner "remote-exec" {
     inline = [
       "sudo amazon-linux-extras enable epel",
-      "sudo yum install epel-release",
-      "sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm",
+      "sudo yum -y install epel-release",
+      "sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm",
       "sudo yum-config-manager --enable remi-php54",
-      "sudo yum install php php-cli php-common php-mbstring php-xml php-mysql php-fpm",
-      "sudo yum install httpd git",
+      "sudo yum -y install httpd git",
+      "sudo yum -y install php php-cli php-common php-mbstring php-xml php-mysql php-fpm",
+      "sudo yum -y install httpd git",
       "sudo systemctl enable httpd",
       "sudo systemctl start httpd",
       "git clone https://github.com/adandrea8/php-ecommerce",
-      "cp -r php-ecommerce/* /var/www/html/",
-      "sudo vim /var/www/html/config.php",
-      "sudo yum install php-mysql.x86_64",
-      "sudo yum install mariadb.x86_64",
-      "mysql -h ${aws_db_instance.obligatorio-db.endpoint} -u ${aws_db_instance.obligatorio-db.username} -p${aws_db_instance.obligatorio-db.password} ${aws_db_instance.obligatorio-db.name} < /var/www/html/dump.sql",
+      "sudo mv /var/www/html/admin /var/www/html/admin_backup",
+      "sudo cp -r php-ecommerce/* /var/www/html/",
+      "sudo yum -y install php-mysql.x86_64",
+      "sudo yum -y install mariadb.x86_64",
+      "mysql -h ${aws_db_instance.obligatorio-db.endpoint} -u ${aws_db_instance.obligatorio-db.username} -p${aws_db_instance.obligatorio-db.password} ${aws_db_instance.obligatorio-db.db_name} < /var/www/html/dump.sql",
       "sudo systemctl restart httpd"
     ]
   }
@@ -312,19 +302,9 @@ resource "aws_instance" "app02" {
     Name = "app02"
     terraform = "True"
   }
-  # Contenido de config.php
- #<?php
-	#ini_set('display_errors',1);
-	#error_reporting(-1);
-#	define('DB_HOST', '${aws_db_instance.obligatorio-db.endpoint}');
- #   define('DB_USER', '${aws_db_instance.obligatorio-db.username}');
-  #  define('DB_PASSWORD', '${aws_db_instance.obligatorio-db.password}');
-   # define('DB_DATABASE', '${aws_db_instance.obligatorio-db.name}');
-#?>%",
-  provisioner "file" {
-    source      = "repo/config.php"
-    destination = "/var/www/html/config.php"
-  }
+  depends_on = [aws_db_instance.obligatorio-db]
+
+
   connection {
     type     = "ssh"
     user     = "ec2-user"
@@ -335,18 +315,18 @@ resource "aws_instance" "app02" {
   provisioner "remote-exec" {
     inline = [
       "sudo amazon-linux-extras enable epel",
-      "sudo yum install epel-release",
-      "sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm",
+      "sudo yum -y install epel-release",
+      "sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm",
       "sudo yum-config-manager --enable remi-php54",
-      "sudo yum install php php-cli php-common php-mbstring php-xml php-mysql php-fpm",
-      "sudo yum install httpd git",
+      "sudo yum -y install httpd git",
+      "sudo yum -y install php php-cli php-common php-mbstring php-xml php-mysql php-fpm",
       "sudo systemctl enable httpd",
       "sudo systemctl start httpd",
       "git clone https://github.com/adandrea8/php-ecommerce",
-      "cp -r php-ecommerce/* /var/www/html/",
-      "sudo vim /var/www/html/config.php",
-      "sudo yum install php-mysql.x86_64",
-      "sudo yum install mariadb.x86_64",
+      "sudo mv /var/www/html/admin /var/www/html/admin_backup",
+      "sudo cp -r php-ecommerce/* /var/www/html/",
+      "sudo yum -y install php-mysql.x86_64",
+      "sudo yum -y install mariadb.x86_64",
       "sudo systemctl restart httpd"
     ]
   }
