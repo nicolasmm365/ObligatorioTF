@@ -1,6 +1,6 @@
-# Proyecto Obligatorio: Migración de Infraestructura On-Premise a AWS
+# Migración de Infraestructura On-Premise a AWS
 
-## Descripción del Proyecto
+## Descripción del Obligatorio
 
 Este proyecto tiene como objetivo migrar la infraestructura on-premise de una empresa de e-commerce a Amazon Web Services (AWS) para mejorar la escalabilidad y la performance del sitio web tras una campaña publicitaria que incrementó significativamente el tráfico. La solución propuesta implica el uso de Terraform para automatizar la creación y configuración de la infraestructura en AWS.
 
