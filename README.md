@@ -89,6 +89,11 @@ Para implementar esta solución, necesitarás:
 ### Instancias de Aplicación
 - **EC2 Instances**: Dos instancias `t2.micro` con Amazon Linux 2, cada una en una subred diferente. Configuradas para servir una aplicación PHP clonada desde un repositorio de GitHub.
 
+
+### Repositorio de la Aplicación Web
+https://github.com/adandrea8/php-ecommerce
+
+
 ### Base de Datos
 - **RDS MySQL Instance**: Una instancia `db.t3.micro` de MySQL con 20GB de almacenamiento.
 
@@ -101,7 +106,7 @@ El trabajo en el repositorio ha seguido buenas prácticas de desarrollo colabora
 
 - **Branches**: Se ha utilizado una rama principal (`main`) y ramas de características para el desarrollo.
 - **Pull Requests**: Se han realizado pull requests para la revisión de código antes de fusionar cambios.
-- **Comentarios**: Se han agregado comentarios en el código para facilitar su comprensión.
+- **Comentarios**: Se han agregado comentarios en el código y en los commit para facilitar su comprensión.
 
 ## Diagramas y Documentación
 
