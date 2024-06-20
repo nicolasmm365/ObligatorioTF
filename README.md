@@ -43,8 +43,8 @@ Para implementar esta solución, necesitarás:
 
 1. **Clonar el Repositorio**:
     ```bash
-    git clone <URL_DEL_REPOSITORIO>
-    cd <NOMBRE_DEL_REPOSITORIO>
+    git clone https://github.com/nicolasmm365/ObligatorioTF
+    cd ObligatorioTF...
     ```
 
 2. **Configurar Variables**:
