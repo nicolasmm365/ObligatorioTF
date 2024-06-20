@@ -1,5 +1,11 @@
 # Migración de Infraestructura On-Premise a AWS
 
+## Alumnos
+
+Nicolas Martins - 292534
+
+Alexis D'Andrea - 230556
+
 ## Descripción del Obligatorio
 
 Este proyecto tiene como objetivo migrar la infraestructura on-premise de una empresa de e-commerce a Amazon Web Services (AWS) para mejorar la escalabilidad y la performance del sitio web tras una campaña publicitaria que incrementó significativamente el tráfico. La solución propuesta implica el uso de Terraform para automatizar la creación y configuración de la infraestructura en AWS.
@@ -17,15 +23,13 @@ La nueva arquitectura en AWS incluye los siguientes componentes:
 - Dos instancias de aplicación EC2, cada una en una zona de disponibilidad diferente.
 - Una base de datos relacional MySQL alojada en una instancia de RDS.
 - Un sistema de archivos EFS para almacenamiento compartido y persistente.
-- Políticas de backup para EFS.
+- Política Lifecycle de Infrecuent Access las cuales se usaran para backup en otro EFS.
 
 ## Contenido del Repositorio
 
 El repositorio contiene los siguientes archivos y directorios:
 
 - `main.tf`: Archivo principal de Terraform que define los recursos de AWS.
-- `variables.tf`: Archivo que define las variables utilizadas en el proyecto.
-- `outputs.tf`: Archivo que define las salidas de los recursos creados.
 - `README.md`: Este archivo, que describe el proyecto y su implementación.
 - Diagrama de arquitectura: Un archivo en formato `draw.io` que muestra la arquitectura completa de la solución.
 - Documentación adicional: Información detallada sobre la configuración de la infraestructura, tipos de instancias, bloques CIDR, etc.
@@ -73,8 +77,8 @@ Para implementar esta solución, necesitarás:
 - **Subredes**: Dos subredes públicas en las zonas de disponibilidad `us-east-1a` y `us-east-1b`.
 
 ### Grupos de Seguridad
-- **Load Balancer Security Group**: Permite el tráfico HTTP entrante (puerto 80) desde cualquier IP.
-- **App Web Security Group**: Permite el tráfico HTTP desde el Load Balancer y el tráfico SSH (puerto 22) desde cualquier IP.
+- **Load Balancer Security Group**: Permite el tráfico HTTP entrante (puerto 80) desde cualquier IP para que los clientes puedan acceder a la pagina web del ecommerce.
+- **App Web Security Group**: Permite el tráfico HTTP desde el Load Balancer y el tráfico SSH (puerto 22) solamente de las direcciones IP publicas de los admin.
 - **MySQL Security Group**: Permite el tráfico MySQL (puerto 3306) desde el grupo de seguridad de la aplicación web.
 - **EFS Security Group**: Permite el tráfico NFS (puerto 2049) desde el grupo de seguridad de la aplicación web.
 
