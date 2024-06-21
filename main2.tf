@@ -195,8 +195,6 @@ resource "aws_lb_target_group" "obligatorio_target_group" {
   }
 }
 
-
-
 resource "aws_lb_listener_rule" "obligatorio_listener-rule" {
   listener_arn = aws_lb_listener.obligatorio_listener.arn
   priority     = 100
@@ -241,8 +239,9 @@ locals {
     sudo yum -y install httpd git
     sudo systemctl enable httpd
     sudo systemctl start httpd
-    git clone https://github.com/adandrea8/php-ecommerce
-    sudo mv /var/www/html/admin /var/www/html/admin_backup
+    sudo yum install -y amazon-efs-utils
+    sudo mount -t efs -o tls ${aws_efs_file_system.efs_obligatorio.id}:/ /var/www/html
+    git clone https://github.com/adandrea8/php-ecommerce   
     sudo cp -r php-ecommerce/* /var/www/html/
     sudo sed -i s/db_endpoint/$(echo ${aws_db_instance.obligatorio-db.endpoint} | cut -d: -f1)/g /var/www/html/config.php 
     sudo yum -y install php-mysql.x86_64
@@ -259,9 +258,7 @@ resource "aws_launch_template" "webapp_launch_template" {
   key_name      = "vockey"
   ebs_optimized = false  # Opcional: ajusta según tus necesidades
 
-  depends_on = [aws_db_instance.obligatorio-db]
-
-
+  depends_on = [aws_db_instance.obligatorio-db, aws_efs_file_system.efs_obligatorio]
 
   network_interfaces {
     associate_public_ip_address = true
@@ -281,13 +278,11 @@ resource "aws_launch_template" "webapp_launch_template" {
 }
 
 resource "aws_autoscaling_group" "webapp_autoscaling_group" {
-  name                      = "webapp-autoscaling-group"
+  name      = "webapp-autoscaling-group"
   launch_template {
-    id                       = aws_launch_template.webapp_launch_template.id
+    id      = aws_launch_template.webapp_launch_template.id
     version = "$Latest"
   }
-
-
 
   min_size                  = 1
   max_size                  = 3
@@ -306,7 +301,6 @@ resource "aws_autoscaling_group" "webapp_autoscaling_group" {
   
   depends_on = [aws_launch_template.webapp_launch_template]
 }
-
 
 resource "aws_efs_file_system" "efs_obligatorio" {
   creation_token = "FileSystem"
