@@ -244,9 +244,10 @@ locals {
     git clone https://github.com/adandrea8/php-ecommerce
     sudo mv /var/www/html/admin /var/www/html/admin_backup
     sudo cp -r php-ecommerce/* /var/www/html/
+    sudo sed -i s/db_endpoint/$(echo ${aws_db_instance.obligatorio-db.endpoint} | cut -d: -f1)/g /var/www/html/config.php 
     sudo yum -y install php-mysql.x86_64
     sudo yum -y install mariadb.x86_64
-    mysql -h ${aws_db_instance.obligatorio-db.endpoint} -u ${aws_db_instance.obligatorio-db.username} -p${aws_db_instance.obligatorio-db.password} ${aws_db_instance.obligatorio-db.db_name} < /var/www/html/dump.sql
+    mysql -h $(echo ${aws_db_instance.obligatorio-db.endpoint} | cut -d: -f1) -u ${aws_db_instance.obligatorio-db.username} -p${aws_db_instance.obligatorio-db.password} ${aws_db_instance.obligatorio-db.db_name} < /var/www/html/dump.sql
     sudo systemctl restart httpd
   EOF
 }
