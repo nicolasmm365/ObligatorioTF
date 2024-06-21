@@ -13,7 +13,6 @@ resource "aws_vpc" "vpc_obligatorio" {
   }
 }
 
-
 resource "aws_security_group" "tf_sg_lb_obligatorio" {
   name = "tf_sg_lb_obligatorio"
   vpc_id = aws_vpc.vpc_obligatorio.id
@@ -185,33 +184,15 @@ resource "aws_lb_target_group" "obligatorio_target_group" {
     path                = "/"
     port                = "80"
     protocol            = "HTTP"
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 3
-    interval            = 30
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
+    timeout             = 5
+    interval            = 60
   }
 
   tags = {
     Name = "obligatorio-target-group"
   }
-}
-
-# Agregar instancias de aplicación a los grupos de destino
-
-
-locals {
-  instances = [
-    aws_instance.app01,
-    aws_instance.app02
-  ]
-}
-
-resource "aws_lb_target_group_attachment" "obligatorio_target_group" {
-  for_each = { for idx, instance in local.instances : idx => instance }
-
-  target_group_arn = aws_lb_target_group.obligatorio_target_group.arn
-  target_id        = each.value.id
-  port             = 80
 }
 
 
@@ -237,100 +218,94 @@ resource "aws_db_instance" "obligatorio-db" {
   storage_type         = "gp2"
   engine               = "mysql"
   engine_version       = "5.7.44" 
-  instance_class       = "db.t3.micro"  
+  instance_class       = "db.t3.micro" 
   username             = "admin"
   password             = "password"
   skip_final_snapshot  = true
   vpc_security_group_ids = [aws_security_group.tf_sg_mysql_obligatorio.id]
   db_subnet_group_name = aws_db_subnet_group.obligatorio_db_subnet_group.name
-
+  db_name              = "iDukan"
   tags = {
     Name = "obligatorio-db"
   }
 }
 
-# Provisionar las instancias de aplicación en las zonas de disponibilidad A y B
-resource "aws_instance" "app01" {
-  ami           = "ami-02aead0a55359d6ec"
-  vpc_security_group_ids = [aws_security_group.tf_sg_appweb_obligatorio.id]
-  instance_type = "t2.micro"
-  key_name	= "vockey"
-  associate_public_ip_address = true
-  subnet_id     = aws_subnet.subnet_a.id
-  tags = {
-    Name = "app01"
-    terraform = "True"
-  }
-  depends_on = [aws_db_instance.obligatorio-db]
-
-  connection {
-    type     = "ssh"
-    user     = "ec2-user"
-    host     = self.public_ip
-    private_key = file("C:\\labsuser.pem")
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "sudo amazon-linux-extras enable epel",
-      "sudo yum -y install epel-release",
-      "sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm",
-      "sudo yum-config-manager --enable remi-php54",
-      "sudo yum -y install httpd git",
-      "sudo yum -y install php php-cli php-common php-mbstring php-xml php-mysql php-fpm",
-      "sudo yum -y install httpd git",
-      "sudo systemctl enable httpd",
-      "sudo systemctl start httpd",
-      "git clone https://github.com/adandrea8/php-ecommerce",
-      "sudo mv /var/www/html/admin /var/www/html/admin_backup",
-      "sudo cp -r php-ecommerce/* /var/www/html/",
-      "sudo yum -y install php-mysql.x86_64",
-      "sudo yum -y install mariadb.x86_64",
-      "mysql -h ${aws_db_instance.obligatorio-db.endpoint} -u ${aws_db_instance.obligatorio-db.username} -p${aws_db_instance.obligatorio-db.password} ${aws_db_instance.obligatorio-db.db_name} < /var/www/html/dump.sql",
-      "sudo systemctl restart httpd"
-    ]
-  }
+locals {
+  webapp_user_data = <<-EOF
+    #!/bin/bash
+    sudo amazon-linux-extras enable epel
+    sudo yum -y install epel-release
+    sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    sudo yum-config-manager --enable remi-php54
+    sudo yum -y install php php-cli php-common php-mbstring php-xml php-mysql php-fpm
+    sudo yum -y install httpd git
+    sudo systemctl enable httpd
+    sudo systemctl start httpd
+    git clone https://github.com/adandrea8/php-ecommerce
+    sudo mv /var/www/html/admin /var/www/html/admin_backup
+    sudo cp -r php-ecommerce/* /var/www/html/
+    sudo yum -y install php-mysql.x86_64
+    sudo yum -y install mariadb.x86_64
+    mysql -h ${aws_db_instance.obligatorio-db.endpoint} -u ${aws_db_instance.obligatorio-db.username} -p${aws_db_instance.obligatorio-db.password} ${aws_db_instance.obligatorio-db.db_name} < /var/www/html/dump.sql
+    sudo systemctl restart httpd
+  EOF
 }
 
-resource "aws_instance" "app02" {
-  ami           = "ami-02aead0a55359d6ec"
-  vpc_security_group_ids = [aws_security_group.tf_sg_appweb_obligatorio.id]
+resource "aws_launch_template" "webapp_launch_template" {
+  name_prefix   = "webapp_launch_template"
+  image_id      = "ami-02aead0a55359d6ec"
   instance_type = "t2.micro"
-  key_name	= "vockey"
-  subnet_id     = aws_subnet.subnet_b.id
-  associate_public_ip_address = true
-  tags = {
-    Name = "app02"
-    terraform = "True"
-  }
+  key_name      = "vockey"
+  ebs_optimized = false  # Opcional: ajusta según tus necesidades
+
   depends_on = [aws_db_instance.obligatorio-db]
 
 
-  connection {
-    type     = "ssh"
-    user     = "ec2-user"
-    host     = self.public_ip
-    private_key = file("C:\\labsuser.pem")
+
+  network_interfaces {
+    associate_public_ip_address = true
+    subnet_id                   = aws_subnet.subnet_a.id
+    security_groups             = [aws_security_group.tf_sg_appweb_obligatorio.id]
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+    tags = {
+      Name      = "webapp"
+      terraform = "True"
+    }
+  }
+
+  user_data = base64encode(local.webapp_user_data)
+}
+
+resource "aws_autoscaling_group" "webapp_autoscaling_group" {
+  name                      = "webapp-autoscaling-group"
+  launch_template {
+    id                       = aws_launch_template.webapp_launch_template.id
+    version = "$Latest"
+  }
+
+
+
+  min_size                  = 1
+  max_size                  = 3
+  desired_capacity          = 2
+
+  vpc_zone_identifier       = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id]  # ID de la subred donde lanzar las instancias
+
+  target_group_arns         = [aws_lb_target_group.obligatorio_target_group.arn]  # ARN del Target Group si se usa con un ALB
+
+  health_check_type         = "EC2"  # Cambiado a EC2
+  health_check_grace_period = 300  # Aumentado a 300 segundos (5 minutos)
+
+  lifecycle {
+    create_before_destroy   = true
   }
   
-  provisioner "remote-exec" {
-    inline = [
-      "sudo amazon-linux-extras enable epel",
-      "sudo yum -y install epel-release",
-      "sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm",
-      "sudo yum-config-manager --enable remi-php54",
-      "sudo yum -y install httpd git",
-      "sudo yum -y install php php-cli php-common php-mbstring php-xml php-mysql php-fpm",
-      "sudo systemctl enable httpd",
-      "sudo systemctl start httpd",
-      "git clone https://github.com/adandrea8/php-ecommerce",
-      "sudo mv /var/www/html/admin /var/www/html/admin_backup",
-      "sudo cp -r php-ecommerce/* /var/www/html/",
-      "sudo yum -y install php-mysql.x86_64",
-      "sudo yum -y install mariadb.x86_64",
-      "sudo systemctl restart httpd"
-    ]
-  }
+  depends_on = [aws_launch_template.webapp_launch_template]
 }
+
 
 resource "aws_efs_file_system" "efs_obligatorio" {
   creation_token = "FileSystem"
