@@ -156,10 +156,14 @@ resource "aws_route_table" "route_table_obligatorio" {
 }
 
 resource "aws_route_table_association" "subnet_a_assoc" {
-  subnet_id      = aws_subnet.subnet_b_privada.id
+  subnet_id      = aws_subnet.subnet_a.id
   route_table_id = aws_route_table.route_table_obligatorio.id
 }
 
+resource "aws_route_table_association" "subnet_b_assoc" {
+  subnet_id      = aws_subnet.subnet_b.id
+  route_table_id = aws_route_table.route_table_obligatorio.id
+}
 
 # Crear un balanceador de carga de aplicación (ALB)
 resource "aws_lb" "obligatorio_alb" {
