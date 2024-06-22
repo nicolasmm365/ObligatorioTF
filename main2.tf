@@ -139,7 +139,7 @@ resource "aws_subnet" "subnet_b_privada" {
 # Crear grupo de subredes para la base de datos dentro de la nueva VPC
 resource "aws_db_subnet_group" "obligatorio_db_subnet_group" {
   name       = "obligatorio-db-subnet-group"
-  subnet_ids = [aws_subnet.subnet_a_privada.id, aws_subnet.subnet_b_privada.id]
+  subnet_ids = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id]
 }
 
 
