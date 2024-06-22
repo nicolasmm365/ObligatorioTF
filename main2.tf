@@ -116,10 +116,30 @@ resource "aws_subnet" "subnet_b" {
   }
 }
 
+resource "aws_subnet" "subnet_a_privada" {
+  vpc_id            = aws_vpc.vpc_obligatorio.id
+  cidr_block        = "10.0.3.0/24"
+  availability_zone = "us-east-1a"
+  map_public_ip_on_launch = "true"
+  tags = {
+    Name = "subnet-a-privada"
+  }
+}
+
+resource "aws_subnet" "subnet_b_privada" {
+  vpc_id            = aws_vpc.vpc_obligatorio.id
+  cidr_block        = "10.0.4.0/24"
+  availability_zone = "us-east-1b"
+  map_public_ip_on_launch = "true"
+  tags = {
+    Name = "subnet-b-privada"
+  }
+}
+
 # Crear grupo de subredes para la base de datos dentro de la nueva VPC
 resource "aws_db_subnet_group" "obligatorio_db_subnet_group" {
   name       = "obligatorio-db-subnet-group"
-  subnet_ids = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id]
+  subnet_ids = [aws_subnet.subnet_a_privada.id, aws_subnet.subnet_b_privada.id]
 }
 
 
@@ -136,14 +156,10 @@ resource "aws_route_table" "route_table_obligatorio" {
 }
 
 resource "aws_route_table_association" "subnet_a_assoc" {
-  subnet_id      = aws_subnet.subnet_a.id
+  subnet_id      = aws_subnet.subnet_b_privada.id
   route_table_id = aws_route_table.route_table_obligatorio.id
 }
 
-resource "aws_route_table_association" "subnet_b_assoc" {
-  subnet_id      = aws_subnet.subnet_b.id
-  route_table_id = aws_route_table.route_table_obligatorio.id
-}
 
 # Crear un balanceador de carga de aplicación (ALB)
 resource "aws_lb" "obligatorio_alb" {
@@ -304,22 +320,12 @@ resource "aws_autoscaling_group" "webapp_autoscaling_group" {
 
 resource "aws_efs_file_system" "efs_obligatorio" {
   creation_token = "FileSystem"
-  lifecycle_policy {
-    transition_to_ia = "AFTER_30_DAYS"
-  }
   tags = {
     Name = "FileSystem"
   }
 }
 
-resource "aws_efs_backup_policy" "backup_policy" {
-  file_system_id = aws_efs_file_system.efs_obligatorio.id
-  # Aplicar la policy solo a la carpeta que contiene los backups
 
-  backup_policy {
-    status = "ENABLED"
-  }
-}
 
 resource "aws_efs_mount_target" "efs_mount_b" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
@@ -331,4 +337,48 @@ resource "aws_efs_mount_target" "efs_mount_a" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
   subnet_id     = aws_subnet.subnet_a.id
   security_groups = [aws_security_group.tf_sg_efs_obligatorio.id]
+}
+
+resource "aws_backup_vault" "bk_vault" {
+  name        = "bk_vault"
+  tags = {
+    Name = "bk_vault"
+  }
+}
+
+
+#Crear plan de backup
+resource "aws_backup_plan" "bk_plan" {
+  name = "bk_plan"
+
+  rule {
+    rule_name         = "weekly-backup"
+    target_vault_name = aws_backup_vault.bk_vault.name
+    schedule          = "cron(0 5 ? * 7 *)" # Semanal a las 5 AM UTC, los domingos
+    lifecycle {
+      cold_storage_after = 30
+      delete_after       = 120
+    }
+  }
+}
+
+#Crear selección de backup para ambos recursos
+resource "aws_backup_selection" "efs_selection" {
+  iam_role_arn = "arn:aws:iam::580282562494:role/aws-service-role/backup.amazonaws.com/AWSServiceRoleForBackup"
+  name         = "efs_selection"
+  plan_id      = aws_backup_plan.bk_plan.id
+
+  resources = [
+    aws_efs_file_system.efs_obligatorio.arn
+  ]
+}
+
+resource "aws_backup_selection" "rds_selection" {
+  iam_role_arn = "arn:aws:iam::580282562494:role/aws-service-role/backup.amazonaws.com/AWSServiceRoleForBackup"
+  name         = "rds_selection"
+  plan_id      = aws_backup_plan.bk_plan.id
+
+  resources = [
+    aws_db_instance.obligatorio-db.arn
+  ]
 }
