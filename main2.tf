@@ -116,26 +116,6 @@ resource "aws_subnet" "subnet_b" {
   }
 }
 
-resource "aws_subnet" "subnet_a_privada" {
-  vpc_id            = aws_vpc.vpc_obligatorio.id
-  cidr_block        = "10.0.3.0/24"
-  availability_zone = "us-east-1a"
-  map_public_ip_on_launch = "true"
-  tags = {
-    Name = "subnet-a-privada"
-  }
-}
-
-resource "aws_subnet" "subnet_b_privada" {
-  vpc_id            = aws_vpc.vpc_obligatorio.id
-  cidr_block        = "10.0.4.0/24"
-  availability_zone = "us-east-1b"
-  map_public_ip_on_launch = "true"
-  tags = {
-    Name = "subnet-b-privada"
-  }
-}
-
 # Crear grupo de subredes para la base de datos dentro de la nueva VPC
 resource "aws_db_subnet_group" "obligatorio_db_subnet_group" {
   name       = "obligatorio-db-subnet-group"
