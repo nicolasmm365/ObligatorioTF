@@ -1,56 +1,42 @@
+# Provider
 variable "region" {
-  description = "The AWS region to create resources in"
+  description = "Region"
   type        = string
 }
-
-
-
-variable "key_name" {
-  description = "The name of the key pair to use for EC2 instances"
-  type        = string
-}
-
-
-
 
 variable "profile" {
   default     = "default"
   description = "Perfil estandar"
 }
 
-variable "aws_region" {
-  default     = "us-east-1"
-  description = "Region a aplicar"
+# EC2
+variable "key_name" {
+  description = "Par de claves vockey"
+  type        = string
 }
 
-# Variables de Red 
+# VPC 
 variable "vpc_cidr" {
-  #default     = "10.0.0.0/16"
   description = "CIDR del VPC"
 }
 
 variable "subnet_a_cidr" {
-  #default     = "10.0.1.0/24"
   description = "Direccion de subred a"
 }
 
 variable "subnet_b_cidr" {
-  #default     = "10.0.2.0/24"
   description = "Direccion de subred b"
 }
 
 variable "vpc_aws_az-a" {
-  #default     = "us-east-1a"
-  description = "Zona de disponibilidad 1"
+  description = "Zona de disponibilidad a"
 }
 
 variable "vpc_aws_az-b" {
-  #default     = "us-east-1b"
-  description = "Zona de disponibilidad 2"
+  description = "Zona de disponibilidad b"
 }
 
 variable "vpc_name" {
-  #default = "vpc-obligatorio"
   description = "Nombre del VPC"
 }
 
@@ -74,12 +60,12 @@ variable "tag_rtable" {
   description = "Tag Route Table"
 }
 
-# Variables EC2 
-
+# Security Group 
 variable "nombre_sg_lb" {
   type        = string
   description = "Nombre del SG para el LB"
 }
+
 variable "tag_sg_lb" {
   type        = string
   description = "Nombre del SG del LB"
@@ -89,11 +75,11 @@ variable "nombre_sg_appweb" {
   type        = string
   description = "Nombre del SG para del web Server"
 }
+
 variable "tag_sg_appweb" {
   type        = string
   description = "Nombre del SG del web Server"
 }
-
 
 variable "nombre_sg_mysql" {
   type        = string
@@ -113,26 +99,42 @@ variable "tag_sg_efs" {
   description = "Tag del SG del EFS"
 }
 
+# RDS
+variable "rds_instance_class" {
+  description = "Tipo de instancia"
+}
 
+variable "rds_tag_name_db" {
+  description = "Tag de base de datos"
+}
 
-#Variables RDS
+variable "db_name" {
+  description = "Nombre de base de datos"
+}
 
-variable "rds_instance_class" {}
-variable "rds_tag_name_db" {}
-variable "db_name" {}
-variable "rds_engine_version" {}
-variable "rds_engine" {}
-variable "rds_storage_type" {}
-variable "rds_allocated_storage" {}
+variable "rds_engine_version" {
+  description = "Version de motor de base de datos"
+}
+
+variable "rds_engine" {
+  description = "Motor de base de datos"
+}
+
+variable "rds_storage_type" {
+  description = "Tipo de storate"
+}
+
+variable "rds_allocated_storage" {
+  description = "Localidad del storage"
+}
+
 variable "rds_db_username" {
-  description = "The username for the RDS instance"
+  description = "Usuario de la instancia RDS"
   type        = string
 }
 
-
-
 variable "rds_db_password" {
-  description = "The password for the RDS instance"
+  description = "Password de la instancia RDS"
   type        = string
   sensitive   = true
 }
