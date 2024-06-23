@@ -1,20 +1,20 @@
-output "db_instance_arn" {
+output "rds_db_instance_arn" {
   value = aws_db_instance.obligatorio-db.arn
 }
 
-output "db_endpoint" {
+output "rds_db_endpoint" {
   value = aws_db_instance.obligatorio-db.endpoint
 }
 
-output "db_username" {
+output "rds_db_username" {
   value = aws_db_instance.obligatorio-db.username
 }
 
-output "db_password" {
+output "rds_db_password" {
   value = aws_db_instance.obligatorio-db.password
 }
 
-output "db_name" {
+output "rds_db_name" {
   value = aws_db_instance.obligatorio-db.db_name
 }
 
