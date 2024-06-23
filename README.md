@@ -90,16 +90,10 @@ Para implementar esta solución, necesitarás:
 
 ### Instancias de Aplicación
 - **EC2 Instances**: Dos instancias `t2.micro` con Amazon Linux 2, cada una en una subred diferente. Configuradas para servir una aplicación PHP clonada desde un repositorio de GitHub.
+- **Auto Scalling Group**: Se encargará de en caso de falla de alguna de las instancias estas se vuelvan a crear respetando los parametros preestablecidos.
 
-### Modulos ###
 
-[ec2](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/ec2/ec2.md)
-[efs](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/efs/efs.md)
-[rds](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/rds/rds.md)
-[sg](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/sg/sg.md)
-[vpc](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/vpc/vpc.md)
-
-### Repositorio de la Aplicación Web
+#### Repositorio de la Aplicación Web
 https://github.com/adandrea8/php-ecommerce
 
 
@@ -109,11 +103,23 @@ https://github.com/adandrea8/php-ecommerce
 ### Almacenamiento de Archivos
 - **EFS**: Sistema de archivos EFS con puntos de montaje en ambas subredes y políticas de backup habilitadas.
 
+## Modulos ##
+En los siguientes links se podra acceder a los distintos README en los cuales se encontrará una breve descripcion del funcionamiento del codigo desplegado en cada modulo.
+
+
+|  Modulo  |  Descripción |
+|--|--|
+|  [EC2](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/ec2/ec2.md)  |  Despliegue de instancias EC2, load balancer, auto scalling group, etc. |
+|  [EFS](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/efs/efs.md)  | Despliegue del file system y la creacion del backup vault.   |
+|[RDS](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/rds/rds.md) | Despliegue de la instancia de base de datos RDS con motor MySQL.|
+| [SG](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/sg/sg.md) | Despliegue de los Security Groups necesarios para la comunicacion entre los recursos.|
+|  [VPC](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/vpc/vpc.md) | Despliegue de todo lo relacionado con la red.
+
 ## Colaboración y Buenas Prácticas
 
 El trabajo en el repositorio ha seguido buenas prácticas de desarrollo colaborativo:
 
-- **Branches**: Se ha utilizado una rama principal (`main`) y ramas de características para el desarrollo.
+- **Branches**: Se ha utilizado una rama principal (`main`) y dos ramas de pruebas (`pruebas` y `pruebas-2`) para el desarrollo.
 - **Pull Requests**: Se han realizado pull requests para la revisión de código antes de fusionar cambios.
 - **Comentarios**: Se han agregado comentarios en el código y en los commit para facilitar su comprensión.
 
