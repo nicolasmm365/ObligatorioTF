@@ -91,6 +91,13 @@ Para implementar esta solución, necesitarás:
 ### Instancias de Aplicación
 - **EC2 Instances**: Dos instancias `t2.micro` con Amazon Linux 2, cada una en una subred diferente. Configuradas para servir una aplicación PHP clonada desde un repositorio de GitHub.
 
+### Modulos ###
+
+[ec2](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/ec2/ec2.md)
+[efs](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/efs/efs.md)
+[rds](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/rds/rds.md)
+[sg](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/sg/sg.md)
+[vpc](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/vpc/vpc.md)
 
 ### Repositorio de la Aplicación Web
 https://github.com/adandrea8/php-ecommerce
