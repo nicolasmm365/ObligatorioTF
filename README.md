@@ -12,7 +12,7 @@ Este proyecto tiene como objetivo migrar la infraestructura on-premise de una em
 
 ## Arquitectura Implementada
 
-![imagen](https://github.com/nicolasmm365/ObligatorioTF/assets/56324802/84544f96-bc2c-4830-b986-e8817619537f)
+![imagen](https://github.com/nicolasmm365/ObligatorioTF/blob/main/images/Diagrama%20AWS.jpg)
 
 La nueva arquitectura en AWS incluye los siguientes componentes:
 
@@ -128,7 +128,7 @@ El trabajo en el repositorio ha seguido buenas prácticas de desarrollo colabora
 El repositorio incluye un diagrama de arquitectura detallado en formato `draw.io`, mostrando todos los componentes de la infraestructura y sus interconexiones.
 
 ## Aplicación WEB ##
-![imagen](https://github.com/nicolasmm365/ObligatorioTF/assets/56324802/4fcefe3c-e3de-4c2e-a585-41c769c1dcf8)
+![imagen](https://github.com/nicolasmm365/ObligatorioTF/blob/main/images/Aplicacion-Web.jpg)
 
 Al finalizar el despliegue de la infraestructura en terraform, devolvera el link de la aplicación web (load balancer).
 
