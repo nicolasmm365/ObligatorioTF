@@ -11,6 +11,7 @@ Este código crea una VPC con dos subredes en diferentes zonas de disponibilidad
 - **Subnets**: Crea dos subnets públicas en diferentes zonas de disponibilidad.
 - **Internet Gateway**: Permite la conectividad de la VPC a Internet.
 - **Route Table**: Configura una tabla de rutas para permitir el tráfico a través del Internet Gateway.
+- **Route Table Association**: Asocia las subnets a la Route Table.
 
 ## Variables
 
