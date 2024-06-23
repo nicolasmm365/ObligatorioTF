@@ -24,9 +24,17 @@ module "rds" {
   subnet_a_cidr   = module.vpc.subnet_a_cidr        # Subnet a
   subnet_b_cidr   = module.vpc.subnet_b_cidr        # Subnet b
   db_sg_id   = module.vpc.db_sg_id
-  db_username = var.db_username
-  db_password = var.db_password
-  
+  rds_db_username = var.rds_db_username
+  rds_db_password = var.rds_db_password
+  rds_db_name = var.rds_db_namE
+  rds_instance_class = var.rds_instance_class
+  rds_tag_name_db = var.rds_tag_name_db
+  rds_engine_version = var.rds_engine_version
+  rds_engine = var.rds_engine
+  rds_storage_type = var.rds_storage_type
+  rds_allocated_storage    = var.rds_allocated_storage
+
+
   depends_on = [ module.vpc ]
 }
 
@@ -49,8 +57,8 @@ module "ec2" {
   appweb_sg_id = module.vpc.appweb_sg_id
   efs_id       = module.efs.efs_id
   db_endpoint  = module.rds.db_endpoint
-  db_username  = var.db_username
-  db_password  = var.db_password
+  db_username  = var.rds_db_username
+  db_password  = var.rds_db_password
   db_name      = module.rds.db_name
   key_name     = var.key_name
   id_vpc            = module.vpc.id_vpc          # Variable ID de la VPC
