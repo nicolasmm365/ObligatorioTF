@@ -31,4 +31,4 @@ En conjunto, estos recursos permiten la creación de una instancia de base de da
 - `rds_db_instance_arn`: ARN de la instancia de RDS.
 - `rds_db_endpoint`: Endpoint de la base de datos.
 - `rds_db_name`: Nombre de la base de datos.
-
+- `db_subnet_group_name`: Subnet group de la base de datos.
