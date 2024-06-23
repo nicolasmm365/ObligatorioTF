@@ -12,6 +12,9 @@ Además, configura selecciones de respaldo para el sistema de archivos EFS y una
 
 - **EFS File System**: Crea un sistema de archivos EFS.
 - **EFS Mount Targets**: Crea puntos de montaje en las subnets especificadas.
+- **Backup Vault**: Crea el backup voult, donde se almacenaran los backups.
+- **Backup Plan**: Crea el plan de backup en el cual se decide cuando se haran y cuanto tiempo persistiran los mismos.
+- **Backup Selection**: Selecciona los recursos a respaldar.
 
 ## Variables
 
