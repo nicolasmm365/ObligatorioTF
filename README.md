@@ -53,7 +53,7 @@ Para implementar esta solución, necesitarás:
 1. **Clonar el Repositorio y posicionarse en el directorio**:
     ```bash
     git clone https://github.com/nicolasmm365/ObligatorioTF.git
-    cd ObligatorioTF...
+    cd ObligatorioTF
     ```
 
 2. **Inicializar Terraform**:
