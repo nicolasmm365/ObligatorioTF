@@ -4,33 +4,33 @@ resource "aws_vpc" "vpc_obligatorio" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "vpc-obligatorio"
+    Name = var.vpc_name
   }
 }
 
 resource "aws_subnet" "subnet_a" {
   vpc_id            = aws_vpc.vpc_obligatorio.id
-  cidr_block        = var.subnet_cidrs[0]
-  availability_zone = "us-east-1a"
+  cidr_block        = var.subnet_a_cidr
+  availability_zone = var.vpc_aws_az-a
   map_public_ip_on_launch = true
   tags = {
-    Name = "subnet-a"
+    Name = var.tag_subnet_a
   }
 }
 
 resource "aws_subnet" "subnet_b" {
   vpc_id            = aws_vpc.vpc_obligatorio.id
-  cidr_block        = var.subnet_cidrs[1]
-  availability_zone = "us-east-1b"
+  cidr_block        = var.subnet_b_cidr
+  availability_zone = var.vpc_aws_az-b
   map_public_ip_on_launch = true
   tags = {
-    Name = "subnet-b"
+    Name = var.tag_subnet_b
   }
 }
 
 resource "aws_security_group" "tf_sg_lb_obligatorio" {
-  name = "tf_sg_lb_obligatorio"
-  vpc_id = aws_vpc.vpc_obligatorio.id
+  name = var.nombre_sg_lb
+  vpc_id = var.id_vpc
   ingress {
     from_port   = 80
     to_port     = 80
@@ -45,13 +45,13 @@ resource "aws_security_group" "tf_sg_lb_obligatorio" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = "tf_sg_lb_obligatorio"
+    Name = var.tag_sg_lb
   }
 }
 
 resource "aws_security_group" "tf_sg_appweb_obligatorio" {
-  name = "tf_sg_appweb_obligatorio"
-  vpc_id = aws_vpc.vpc_obligatorio.id
+  name = var.nombre_sg_appweb
+  vpc_id = var.id_vpc
   ingress {
     from_port   = 22
     to_port     = 22
@@ -71,12 +71,12 @@ resource "aws_security_group" "tf_sg_appweb_obligatorio" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = "tf_sg_appweb_obligatorio"
+    Name = var.tag_sg_appweb
   }
 }
 
 resource "aws_security_group" "tf_sg_mysql_obligatorio" {
-  name        = "tf_sg_mysql_obligatorio"
+  name        = var.nombre_sg_mysql
   description = "Security group MySQL"
   vpc_id      = aws_vpc.vpc_obligatorio.id
 
@@ -86,12 +86,15 @@ resource "aws_security_group" "tf_sg_mysql_obligatorio" {
     protocol    = "tcp"
     security_groups  = [aws_security_group.tf_sg_appweb_obligatorio.id]
   }
+  tags = {
+    Name = var.tag_sg_mysql
+  }
 }
 
 resource "aws_security_group" "tf_sg_efs_obligatorio" {
-  name        = "tf_sg_efs_obligatorio"
+  name        = var.nombre_sg_efs
   description = "Security group EFS"
-  vpc_id      = aws_vpc.vpc_obligatorio.id
+  vpc_id      = var.id_vpc
 
   ingress {
     from_port   = 2049
@@ -105,7 +108,7 @@ resource "aws_internet_gateway" "obligatorio_igw" {
   vpc_id = aws_vpc.vpc_obligatorio.id
 
   tags = {
-    Name = "obligatorio-igw"
+    Name = var.tag_igw
   }
 }
 
@@ -117,7 +120,7 @@ resource "aws_route_table" "route_table_obligatorio" {
     gateway_id = aws_internet_gateway.obligatorio_igw.id
   }
   tags = {
-    Name = "route_table_obligatorio"
+    Name = var.tag_rtable
   }
 }
 
