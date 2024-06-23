@@ -114,6 +114,11 @@ El trabajo en el repositorio ha seguido buenas prácticas de desarrollo colabora
 
 El repositorio incluye un diagrama de arquitectura detallado en formato `draw.io`, mostrando todos los componentes de la infraestructura y sus interconexiones.
 
+## Aplicación WEB ##
+![imagen](https://github.com/nicolasmm365/ObligatorioTF/assets/56324802/4fcefe3c-e3de-4c2e-a585-41c769c1dcf8)
+
+Al finalizar el despliegue de la infraestructura en terraform, devolvera el link de la aplicación web (load balancer).
+
 ## Conclusión
 
 Este proyecto demuestra cómo migrar una infraestructura on-premise a AWS utilizando Terraform para automatizar el proceso. La solución mejora la escalabilidad y resiliencia del sitio web de e-commerce, asegurando una mejor experiencia para los usuarios.
