@@ -31,6 +31,7 @@ variable "key_name" {
 
 
 
+
 variable "profile" {
   default     = "default"
   description = "Perfil estandar"
@@ -129,4 +130,14 @@ variable "tag_sg_efs" {
   type        = string
   description = "Tag del SG del EFS"
 }
+
+
+
+variable "instance_class" {}
+variable "tag_name_db" {}
+variable "db_name" {}
+variable "engine_version" {}
+variable "engine" {}
+variable "storage_type" {}
+variable "allocated_storage" {}
 
