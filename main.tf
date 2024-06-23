@@ -4,10 +4,10 @@ provider "aws" {
 
 module "vpc" {
   source       = "./modules/vpc"
-  subnet_cidrs = var.subnet_cidrs
+#  subnet_cidrs = var.subnet_cidrs
   vpc_cidr        = var.vpc_cidr             # Direccion de Red
-#  subnet_a_cidr   = var.subnet_a_cidr        # Subnet a
-#  subnet_b_cidr   = var.subnet_b_cidr        # Subnet b
+  subnet_a_cidr   = var.subnet_a_cidr        # Subnet a
+  subnet_b_cidr   = var.subnet_b_cidr        # Subnet b
   vpc_aws_az-a    = var.vpc_aws_az-a         # AZ a
   vpc_aws_az-b    = var.vpc_aws_az-b         # AZ b
   vpc_name        = var.vpc_name             # Nombre del VPC
@@ -41,8 +41,8 @@ module "efs" {
 
 module "ec2" {
   source       = "./modules/ec2"
-  vpc_id       = module.vpc.vpc_id
-  subnet_ids   = module.vpc.subnet_ids
+#  vpc_id       = module.vpc.vpc_id
+#  subnet_ids   = module.vpc.subnet_ids
   alb_sg_id    = module.vpc.alb_sg_id
   appweb_sg_id = module.vpc.appweb_sg_id
   efs_id       = module.efs.efs_id
@@ -51,9 +51,9 @@ module "ec2" {
   db_password  = var.db_password
   db_name      = module.rds.db_name
   key_name     = var.key_name
-#  id_vpc            = module.vpc.id_vpc          # Variable ID de la VPC
-#  id_subnet_a       = module.vpc.id_subnet_a     # Variable ID de la Subnet a
-#  id_subnet_b       = module.vpc.id_subnet_b     # Variable ID de la Subnet b
+  id_vpc            = module.vpc.id_vpc          # Variable ID de la VPC
+  id_subnet_a       = module.vpc.id_subnet_a     # Variable ID de la Subnet a
+  id_subnet_b       = module.vpc.id_subnet_b     # Variable ID de la Subnet b
   nombre_sg_lb      = var.nombre_sg_lb           # Nombre del SG del LB
   tag_sg_lb         = var.tag_sg_lb              # Tag del SG del LB
   nombre_sg_appweb  = var.nombre_sg_appweb       # Nombre del SG del Servidor web 
