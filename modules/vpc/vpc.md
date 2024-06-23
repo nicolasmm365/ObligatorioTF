@@ -1,1 +1,0 @@
-Este código crea una VPC con dos subredes en diferentes zonas de disponibilidad de AWS, habilita la conectividad a internet a través de una puerta de enlace de internet, y configura una tabla de enrutamiento para dirigir el tráfico público hacia la puerta de enlace.
