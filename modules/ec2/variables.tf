@@ -1,6 +1,4 @@
 
-variable "alb_sg_id" {}
-variable "appweb_sg_id" {}
 variable "efs_id" {}
 variable "db_endpoint" {}
 variable "db_username" {}
@@ -33,41 +31,9 @@ variable "id_subnet_b" {
   description = "ID del Subnet b"
 }
 
-variable "nombre_sg_lb" {
-  type        = string
-  description = "Nombre del SG para el LB"
-}
-variable "tag_sg_lb" {
-  type        = string
-  description = "Nombre del SG del LB"
-}
+variable "alb_sg_id" {}
+variable "appweb_sg_id" {}
 
-variable "nombre_sg_appweb" {
-  type        = string
-  description = "Nombre del SG para del web Server"
-}
-variable "tag_sg_appweb" {
-  type        = string
-  description = "Nombre del SG del web Server"
-}
-
-variable "nombre_sg_mysql" {
-  type        = string
-  description = "Nombre del SG para MySql"
-}
-variable "tag_sg_mysql" {
-  type        = string
-  description = "Tag del SG de MySql"
-}
-
-variable "nombre_sg_efs" {
-  type        = string
-  description = "Nombre del SG para el EFS"
-}
-variable "tag_sg_efs" {
-  type        = string
-  description = "Tag del SG del EFS"
-}
 variable "subnet_a_cidr" {
   #default = "10.0.1.0/24"
   description = "Direccion de primer subred"

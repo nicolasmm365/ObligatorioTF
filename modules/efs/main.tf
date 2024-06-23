@@ -7,13 +7,13 @@ resource "aws_efs_file_system" "efs_obligatorio" {
 
 resource "aws_efs_mount_target" "efs_mount_a" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
-  subnet_id      = var.subnet_a_cidr
+  subnet_id      = var.id_subnet_a #esta poniendo en cidr en vez del id
   security_groups = [var.efs_sg_id]
 }
 
 resource "aws_efs_mount_target" "efs_mount_b" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
-  subnet_id      = var.subnet_b_cidr
+  subnet_id      = var.id_subnet_b #esta poniendo en cidr en vez del id
   security_groups = [var.efs_sg_id]
 }
 
