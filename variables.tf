@@ -129,6 +129,8 @@ variable "rds_db_username" {
   type        = string
 }
 
+
+
 variable "rds_db_password" {
   description = "The password for the RDS instance"
   type        = string
