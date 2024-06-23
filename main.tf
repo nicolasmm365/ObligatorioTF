@@ -19,8 +19,10 @@ module "vpc" {
 
 module "rds" {
   source     = "./modules/rds"
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.subnet_ids
+  id_vpc     = module.vpc.id_vpc
+#  subnet_ids = module.vpc.subnet_ids
+  subnet_a_cidr   = module.vpc.subnet_a_cidr        # Subnet a
+  subnet_b_cidr   = module.vpc.subnet_b_cidr        # Subnet b
   db_sg_id   = module.vpc.db_sg_id
   db_username = var.db_username
   db_password = var.db_password
