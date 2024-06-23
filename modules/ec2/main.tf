@@ -27,7 +27,7 @@ resource "aws_launch_template" "webapp_launch_template" {
   name_prefix   = "webapp_launch_template"
   image_id      = "ami-02aead0a55359d6ec"
   instance_type = "t2.micro"
-  key_name      = "vockey"
+  key_name      = var.key_name
   ebs_optimized = false
 
 
