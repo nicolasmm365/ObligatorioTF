@@ -50,26 +50,23 @@ Para implementar esta solución, necesitarás:
 
 ## Instrucciones de Implementación
 
-1. **Clonar el Repositorio**:
+1. **Clonar el Repositorio y posicionarse en el directorio**:
     ```bash
-    git clone https://github.com/nicolasmm365/ObligatorioTF
+    git clone https://github.com/nicolasmm365/ObligatorioTF.git
     cd ObligatorioTF...
     ```
 
-2. **Configurar Variables**:
-    - Edita el archivo `variables.tf` para ajustar las configuraciones de acuerdo a tus necesidades.
-
-3. **Inicializar Terraform**:
+2. **Inicializar Terraform**:
     ```bash
     terraform init
     ```
 
-4. **Revisar el Plan**:
+3. **Revisar el Plan**:
     ```bash
     terraform plan
     ```
 
-5. **Aplicar la Configuración**:
+4. **Aplicar la Configuración**:
     ```bash
     terraform apply
     ```
