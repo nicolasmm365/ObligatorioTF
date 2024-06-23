@@ -3,16 +3,6 @@ variable "region" {
   type        = string
 }
 
-#variable "vpc_cidr" {
-#  description = "The CIDR block for the VPC"
-#  type        = string
-#}
-
-#variable "subnet_cidrs" {
-#  description = "A list of CIDR blocks for the subnets"
-#  type        = list(string)
-#}
-
 
 
 variable "key_name" {
@@ -104,6 +94,7 @@ variable "tag_sg_appweb" {
   description = "Nombre del SG del web Server"
 }
 
+
 variable "nombre_sg_mysql" {
   type        = string
   description = "Nombre del SG para MySql"
@@ -121,6 +112,7 @@ variable "tag_sg_efs" {
   type        = string
   description = "Tag del SG del EFS"
 }
+
 
 
 #Variables RDS

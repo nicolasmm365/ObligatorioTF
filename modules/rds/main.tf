@@ -1,6 +1,6 @@
 resource "aws_db_subnet_group" "obligatorio_db_subnet_group" {
   name       = "obligatorio-db-subnet-group"
-  subnet_ids = var.subnet_ids
+  subnet_ids = [var.id_subnet_a,var.id_subnet_b]
   tags = {
     Name = "obligatorio-db-subnet-group"
   }

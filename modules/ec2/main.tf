@@ -1,3 +1,83 @@
+
+resource "aws_security_group" "tf_sg_lb_obligatorio" {
+  name = var.nombre_sg_lb
+  vpc_id = var.id_vpc
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = var.tag_sg_lb
+  }
+}
+
+resource "aws_security_group" "tf_sg_appweb_obligatorio" {
+  name = var.nombre_sg_appweb
+  vpc_id = var.id_vpc
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    security_groups  = [aws_security_group.tf_sg_lb_obligatorio.id]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = var.tag_sg_appweb
+  }
+}
+
+resource "aws_security_group" "tf_sg_mysql_obligatorio" {
+  name        = var.nombre_sg_mysql
+  description = "Security group MySQL"
+  vpc_id      = aws_vpc.vpc_obligatorio.id
+
+  ingress {
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    security_groups  = [aws_security_group.tf_sg_appweb_obligatorio.id]
+  }
+  tags = {
+    Name = var.tag_sg_mysql
+  }
+}
+
+resource "aws_security_group" "tf_sg_efs_obligatorio" {
+  name        = var.nombre_sg_efs
+  description = "Security group EFS"
+  vpc_id      = var.id_vpc
+
+  ingress {
+    from_port   = 2049
+    to_port     = 2049
+    protocol    = "tcp"
+    security_groups  = [aws_security_group.tf_sg_appweb_obligatorio.id]
+  }
+}
+
+
+
+
 locals {
   webapp_user_data = <<-EOF
     #!/bin/bash
@@ -30,7 +110,7 @@ resource "aws_launch_template" "webapp_launch_template" {
 
   network_interfaces {
     associate_public_ip_address = true
-    subnet_id                   = var.subnet_ids[0]
+    subnet_id                   = var.subnet_a_cidr
     security_groups             = [var.appweb_sg_id]
   }
 
@@ -56,7 +136,7 @@ resource "aws_autoscaling_group" "webapp_autoscaling_group" {
   max_size                  = 3
   desired_capacity          = 2
 
-  vpc_zone_identifier       = var.subnet_ids
+  vpc_zone_identifier       = [var.vpc_aws_az-a,var.vpc_aws_az-b]
 
   target_group_arns         = [aws_lb_target_group.obligatorio_target_group.arn]
 
@@ -73,7 +153,7 @@ resource "aws_lb" "obligatorio_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.alb_sg_id]
-  subnets            = var.subnet_ids
+  subnets            = [var.subnet_a_cidr,var.subnet_b_cidr]
 
   tags = {
     Name = "obligatorio-alb"
@@ -96,7 +176,7 @@ resource "aws_lb_target_group" "obligatorio_target_group" {
   name        = "obligatorio-target-group"
   port        = 80
   protocol    = "HTTP"
-  vpc_id      = var.vpc_id
+  vpc_id      = var.id_vpc
   target_type = "instance"
 
   health_check {

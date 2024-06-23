@@ -1,9 +1,9 @@
-variable "vpc_id" {}
-variable "subnet_ids" {}
+
 variable "db_sg_id" {}
 variable "rds_db_username" {}
 variable "rds_db_password" {}
-
+variable "id_subnet_a" {}
+variable "id_subnet_b" {}
 
 variable "rds_instance_class" {}
 variable "rds_tag_name_db" {}
