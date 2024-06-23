@@ -14,3 +14,14 @@ tag_subnet_a    = "Subnet A"
 tag_subnet_b    = "Subnet B"
 tag_igw         = "obligatorio-igw"
 tag_rtable      = "route_table_obligatorio"
+
+
+
+nombre_sg_lb      = "tf_sg_lb_obligatorio"
+tag_sg_lb         = "tf_sg_lb_obligatorio"
+nombre_sg_appweb  = "tf_sg_lb_obligatorio"
+tag_sg_appweb     = "tf_sg_lb_obligatorio"
+nombre_sg_mysql   = "tf_sg_mysql_obligatorio"
+tag_sg_mysql      = "tf_sg_mysql_obligatorio"
+nombre_sg_efs     = "tf_sg_efs_obligatorio"
+tag_sg_efs        = "tf_sg_efs_obligatorio"
