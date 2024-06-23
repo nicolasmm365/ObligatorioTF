@@ -1,8 +1,6 @@
 region        = "us-east-1"
 vpc_cidr      = "10.0.0.0/16"
 #subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
-db_username   = "admin"
-db_password   = "password"
 key_name      = "vockey"
 
 subnet_a_cidr   = "10.0.1.0/24"
@@ -27,10 +25,12 @@ nombre_sg_efs     = "tf_sg_efs_obligatorio"
 tag_sg_efs        = "tf_sg_efs_obligatorio"
 
 
-instance_class = "db.t3.micro"
-tag_name_db = "obligatorio-db"
-db_name = "iDukan"
-engine_version = "5.7.44"
-engine               = "mysql"
-storage_type         = "gp2"
-allocated_storage    = 20
+rds_db_username   = "admin"
+rds_db_password   = "password"
+rds_instance_class = "db.t3.micro"
+rds_tag_name_db = "obligatorio-db"
+rds_db_name = "iDukan"
+rds_engine_version = "5.7.44"
+rds_engine               = "mysql"
+rds_storage_type         = "gp2"
+rds_allocated_storage    = 20
