@@ -109,11 +109,11 @@ En los siguientes links se podra acceder a los distintos README en los cuales se
 
 |  Modulo  |  Descripción |
 |--|--|
-|  [EC2](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/ec2/ec2.md)  |  Despliegue de instancias EC2, load balancer, auto scalling group, etc. |
-|  [EFS](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/efs/efs.md)  | Despliegue del file system y la creacion del backup vault.   |
-|[RDS](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/rds/rds.md) | Despliegue de la instancia de base de datos RDS con motor MySQL.|
-| [SG](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/sg/sg.md) | Despliegue de los Security Groups necesarios para la comunicacion entre los recursos.|
-|  [VPC](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/vpc/vpc.md) | Despliegue de todo lo relacionado con la red.
+|  [EC2](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/ec2/README.md)  |  Despliegue de instancias EC2, load balancer, auto scalling group, etc. |
+|  [EFS](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/efs/README.md)  | Despliegue del file system y la creacion del backup vault.   |
+|[RDS](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/rds/README.md) | Despliegue de la instancia de base de datos RDS con motor MySQL.|
+| [SG](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/sg/README.md) | Despliegue de los Security Groups necesarios para la comunicacion entre los recursos.|
+|  [VPC](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/vpc/README.md) | Despliegue de todo lo relacionado con la red.
 
 ## Colaboración y Buenas Prácticas
 
