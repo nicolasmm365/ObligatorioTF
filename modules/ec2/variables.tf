@@ -1,0 +1,10 @@
+variable "vpc_id" {}
+variable "subnet_ids" {}
+variable "alb_sg_id" {}
+variable "appweb_sg_id" {}
+variable "efs_id" {}
+variable "db_endpoint" {}
+variable "db_username" {}
+variable "db_password" {}
+variable "db_name" {}
+variable "key_name" {}
