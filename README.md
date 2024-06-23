@@ -12,7 +12,7 @@ Este proyecto tiene como objetivo migrar la infraestructura on-premise de una em
 
 ## Arquitectura Implementada
 
-![Diagrama AWS](https://github.com/nicolasmm365/ObligatorioTF/assets/56324802/69da7531-9c73-4641-a7e7-b1393c2140ff)
+![imagen](https://github.com/nicolasmm365/ObligatorioTF/assets/56324802/84544f96-bc2c-4830-b986-e8817619537f)
 
 La nueva arquitectura en AWS incluye los siguientes componentes:
 
