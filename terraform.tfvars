@@ -25,3 +25,12 @@ nombre_sg_mysql   = "tf_sg_mysql_obligatorio"
 tag_sg_mysql      = "tf_sg_mysql_obligatorio"
 nombre_sg_efs     = "tf_sg_efs_obligatorio"
 tag_sg_efs        = "tf_sg_efs_obligatorio"
+
+
+instance_class = "db.t3.micro"
+tag_name_db = "obligatorio-db"
+db_name = "iDukan"
+engine_version = "5.7.44"
+engine               = "mysql"
+storage_type         = "gp2"
+allocated_storage    = 20
