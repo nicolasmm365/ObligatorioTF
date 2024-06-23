@@ -1,3 +1,4 @@
+# Security Group
 variable "nombre_sg_lb" {
   type        = string
   description = "Nombre del SG para el LB"
