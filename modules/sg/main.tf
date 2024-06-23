@@ -49,7 +49,7 @@ resource "aws_security_group" "tf_sg_appweb_obligatorio" {
 resource "aws_security_group" "tf_sg_mysql_obligatorio" {
   name        = var.nombre_sg_mysql
   description = "Security group MySQL"
-  vpc_id      = aws_vpc.vpc_obligatorio.id
+  vpc_id      = var.id_vpc
 
   ingress {
     from_port   = 3306

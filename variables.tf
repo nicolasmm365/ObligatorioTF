@@ -119,7 +119,7 @@ variable "tag_sg_efs" {
 
 variable "rds_instance_class" {}
 variable "rds_tag_name_db" {}
-variable "rds_db_name" {}
+variable "db_name" {}
 variable "rds_engine_version" {}
 variable "rds_engine" {}
 variable "rds_storage_type" {}

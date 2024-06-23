@@ -28,11 +28,12 @@ resource "aws_launch_template" "webapp_launch_template" {
   image_id      = "ami-02aead0a55359d6ec"
   instance_type = "t2.micro"
   key_name      = "vockey"
-  ebs_optimized = false 
+  ebs_optimized = false
+
 
   network_interfaces {
     associate_public_ip_address = true
-    subnet_id                   = var.subnet_a_cidr
+    subnet_id                   = var.id_subnet_a
     security_groups             = [var.appweb_sg_id]
   }
 
@@ -58,8 +59,8 @@ resource "aws_autoscaling_group" "webapp_autoscaling_group" {
   max_size                  = 3
   desired_capacity          = 2
 
-  vpc_zone_identifier       = [var.vpc_aws_az-a,var.vpc_aws_az-b]
-
+   vpc_zone_identifier       = [var.id_subnet_a, var.id_subnet_b]
+  
   target_group_arns         = [aws_lb_target_group.obligatorio_target_group.arn]
 
   health_check_type         = "EC2"
@@ -75,7 +76,7 @@ resource "aws_lb" "obligatorio_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.alb_sg_id]
-  subnets            = [var.subnet_a_cidr,var.subnet_b_cidr]
+  subnets            = [var.id_subnet_a,var.id_subnet_b]
 
   tags = {
     Name = "obligatorio-alb"

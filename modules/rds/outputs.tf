@@ -1,4 +1,4 @@
-output "rds_db_instance_arn" {
+output "db_instance_arn" {
   value = aws_db_instance.obligatorio-db.arn
 }
 
@@ -6,7 +6,7 @@ output "rds_db_endpoint" {
   value = aws_db_instance.obligatorio-db.endpoint
 }
 
-output "rds_db_name" {
+output "db_name" {
   value = aws_db_instance.obligatorio-db.db_name
 }
 
