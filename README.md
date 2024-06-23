@@ -1,11 +1,5 @@
 # Migración de Infraestructura On-Premise a AWS
 
-## Alumnos
-
-Nicolas Martins - 292534
-
-Alexis D'Andrea - 230556
-
 ## Descripción del Obligatorio
 
 Este proyecto tiene como objetivo migrar la infraestructura on-premise de una empresa de e-commerce a Amazon Web Services (AWS) para mejorar la escalabilidad y la performance del sitio web tras una campaña publicitaria que incrementó significativamente el tráfico. La solución propuesta implica el uso de Terraform para automatizar la creación y configuración de la infraestructura en AWS.
@@ -137,6 +131,13 @@ Al finalizar el despliegue de la infraestructura en terraform, devolvera el link
 Este proyecto demuestra cómo migrar una infraestructura on-premise a AWS utilizando Terraform para automatizar el proceso. La solución mejora la escalabilidad y resiliencia del sitio web de e-commerce, asegurando una mejor experiencia para los usuarios.
 
 Para más información, consulta la documentación incluida en el repositorio.
+
+
+## Alumnos
+
+Nicolas Martins - 292534
+
+Alexis D'Andrea - 230556
 
 ---
 
