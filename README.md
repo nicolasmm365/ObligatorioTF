@@ -23,7 +23,8 @@ La nueva arquitectura en AWS incluye los siguientes componentes:
 - Dos instancias de aplicación EC2, cada una en una zona de disponibilidad diferente.
 - Una base de datos relacional MySQL alojada en una instancia de RDS.
 - Un sistema de archivos EFS para almacenamiento compartido y persistente.
-- Política Lifecycle de Infrecuent Access las cuales se usaran para backup en otro EFS.
+- Una política de Backup que se utilizara para realizar los backups del EFS y el RDS.
+- Un Autoscaling group que se encargada de levantar instancias en caso de que alguna falle.
 
 ## Contenido del Repositorio
 
@@ -31,6 +32,10 @@ El repositorio contiene los siguientes archivos y directorios:
 
 - `main.tf`: Archivo principal de Terraform que define los recursos de AWS.
 - `README.md`: Este archivo, que describe el proyecto y su implementación.
+- `variables.tf`: Archivo que contiene las variables que seran utilizadas en el main.
+- `valores.tfvars`: Archivo que contiene el valor de las variables.
+- `outputs.tf`: Archivo que define las salidas de output.
+- `/modules`: Carpeta donde se almacenan los distintos modulos.
 - Diagrama de arquitectura: Un archivo en formato `draw.io` que muestra la arquitectura completa de la solución.
 - Documentación adicional: Información detallada sobre la configuración de la infraestructura, tipos de instancias, bloques CIDR, etc.
 
