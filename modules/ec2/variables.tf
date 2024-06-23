@@ -1,5 +1,7 @@
 # EFS
-variable "efs_id" {}
+variable "efs_id" {
+  description = "ID del EFS"
+}
 
 # RDS
 variable "db_endpoint" {
