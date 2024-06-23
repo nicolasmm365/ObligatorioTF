@@ -39,7 +39,7 @@ module "rds" {
   db_sg_id              = module.sg.db_sg_id              # ID del SG de la base de datos
   rds_db_username       = var.rds_db_username             # Nombre de usuario de la base de datos RDS
   rds_db_password       = var.rds_db_password             # Contraseña de la base de datos RDS
-  rds_db_name           = var.db_name                     # Nombre de  la base de datos RDS
+  db_name               = var.db_name                     # Nombre de  la base de datos RDS
   rds_instance_class    = var.rds_instance_class          # Clase de instancia de RDS
   rds_tag_name_db       = var.rds_tag_name_db             # Tag de la base de datos RDS
   rds_engine_version    = var.rds_engine_version          # Versión del motor de RDS
@@ -66,8 +66,8 @@ module "ec2" {
   appweb_sg_id          = module.sg.appweb_sg_id          # ID del SG de la aplicación web
   efs_id                = module.efs.efs_id               # ID de EFS
   db_endpoint           = module.rds.rds_db_endpoint      # Endpoint de la base de datos RDS
-  db_username           = var.rds_db_username             # Nombre de usuario de la base de datos
-  db_password           = var.rds_db_password             # Contraseña de la base de datos
+  rds_db_username       = var.rds_db_username             # Nombre de usuario de la base de datos
+  rds_db_password       = var.rds_db_password             # Contraseña de la base de datos
   db_name               = module.rds.db_name              # Nombre de la base de datos
   key_name              = var.key_name                    # Nombre de la clave de SSH
   id_vpc                = module.vpc.id_vpc               # ID del VPC

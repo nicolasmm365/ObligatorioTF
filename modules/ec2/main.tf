@@ -18,7 +18,7 @@ locals {
     sudo sed -i s/db_endpoint/$(echo ${var.db_endpoint} | cut -d: -f1)/g /var/www/html/config.php 
     sudo yum -y install php-mysql.x86_64
     sudo yum -y install mariadb.x86_64
-    mysql -h $(echo ${var.db_endpoint} | cut -d: -f1) -u ${var.db_username} -p${var.db_password} ${var.db_name} < /var/www/html/dump.sql
+    mysql -h $(echo ${var.db_endpoint} | cut -d: -f1) -u ${var.rds_db_username} -p${var.rds_db_password} ${var.db_name} < /var/www/html/dump.sql
     sudo systemctl restart httpd
   EOF
 }

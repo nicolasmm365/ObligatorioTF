@@ -17,7 +17,7 @@ resource "aws_db_instance" "obligatorio-db" {
   skip_final_snapshot  = true
   vpc_security_group_ids = [var.db_sg_id]
   db_subnet_group_name = aws_db_subnet_group.obligatorio_db_subnet_group.name
-  db_name              = var.rds_db_name
+  db_name              = var.db_name
   tags = {
     Name = var.rds_tag_name_db
   }
