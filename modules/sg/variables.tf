@@ -39,6 +39,7 @@ variable "tag_sg_efs" {
   description = "Tag del SG del EFS"
 }
 
+# VPC
 variable "id_vpc" {
   type        = string
   description = "ID de la VPC"
