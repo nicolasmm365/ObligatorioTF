@@ -12,6 +12,7 @@ Este código configura una infraestructura completa en AWS para una aplicación 
 
 ## Componentes
 
+- **Locals Block**: Define una variable, que contiene un script en formato bash. Este script se ejecutará en cada instancia EC2 creada por la plantilla de lanzamiento para configurar y desplegar la aplicación web.
 - **Launch Template**: Define una plantilla de lanzamiento para las instancias EC2.
 - **Auto Scaling Group**: Crea un grupo de autoescalado para manejar la capacidad de la aplicación web.
 - **Application Load Balancer**: Crea un ALB para distribuir el tráfico a las instancias EC2.
