@@ -13,16 +13,7 @@ variable "region" {
 #  type        = list(string)
 #}
 
-variable "db_username" {
-  description = "The username for the RDS instance"
-  type        = string
-}
 
-variable "db_password" {
-  description = "The password for the RDS instance"
-  type        = string
-  sensitive   = true
-}
 
 variable "key_name" {
   description = "The name of the key pair to use for EC2 instances"
@@ -132,12 +123,22 @@ variable "tag_sg_efs" {
 }
 
 
+#Variables RDS
 
-variable "instance_class" {}
-variable "tag_name_db" {}
-variable "db_name" {}
-variable "engine_version" {}
-variable "engine" {}
-variable "storage_type" {}
-variable "allocated_storage" {}
+variable "rds_instance_class" {}
+variable "rds_tag_name_db" {}
+variable "rds_db_name" {}
+variable "rds_engine_version" {}
+variable "rds_engine" {}
+variable "rds_storage_type" {}
+variable "rds_allocated_storage" {}
+variable "rds_db_username" {
+  description = "The username for the RDS instance"
+  type        = string
+}
 
+variable "rds_db_password" {
+  description = "The password for the RDS instance"
+  type        = string
+  sensitive   = true
+}
