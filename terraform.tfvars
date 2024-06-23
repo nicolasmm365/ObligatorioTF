@@ -25,12 +25,12 @@ nombre_sg_efs     = "tf_sg_efs_obligatorio"
 tag_sg_efs        = "tf_sg_efs_obligatorio"
 
 
-rds_db_username   = "admin"
-rds_db_password   = "password"
-rds_instance_class = "db.t3.micro"
-rds_tag_name_db = "obligatorio-db"
-rds_db_name = "iDukan"
-rds_engine_version = "5.7.44"
-rds_engine               = "mysql"
-rds_storage_type         = "gp2"
-rds_allocated_storage    = 20
+rds_db_username       = "admin"
+rds_db_password       = "password"
+rds_instance_class    = "db.t3.micro"
+rds_tag_name_db       = "obligatorio-db"
+rds_db_name           = "iDukan"
+rds_engine_version    = "5.7.44"
+rds_engine            = "mysql"
+rds_storage_type      = "gp2"
+rds_allocated_storage = 20
