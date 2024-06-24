@@ -13,6 +13,16 @@ output "id_subnet_b" {
   value = aws_subnet.subnet_b.id
 }
 
+output "id_subnet_a_private" {
+  description = "ID de la Subnet A Privada"
+  value = aws_subnet.subnet_a_private.id
+}
+
+output "id_subnet_b_private" {
+  description = "ID de la Subnet B Privada"
+  value = aws_subnet.subnet_b_private.id
+}
+
 output "subnet_a_cidr" {
   description = "CIDR de la Subnet A"
   value = aws_subnet.subnet_a.cidr_block
