@@ -28,6 +28,26 @@ resource "aws_subnet" "subnet_b" {
   }
 }
 
+resource "aws_subnet" "subnet_a_private" {
+  vpc_id            = aws_vpc.vpc_obligatorio.id
+  cidr_block        = "10.0.3.0/24"
+  availability_zone = var.vpc_aws_az-a
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "Subnet A Privada"
+  }
+}
+
+resource "aws_subnet" "subnet_b_private" {
+  vpc_id            = aws_vpc.vpc_obligatorio.id
+  cidr_block        = "10.0.4.0/24"
+  availability_zone = var.vpc_aws_az-b
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "Subnet B Privada"
+  }
+}
+
 resource "aws_internet_gateway" "obligatorio_igw" {
   vpc_id = aws_vpc.vpc_obligatorio.id
 
