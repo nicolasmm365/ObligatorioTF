@@ -137,6 +137,10 @@ Este proyecto demuestra cómo migrar una infraestructura on-premise a AWS utiliz
 
 Para más información, consulta la documentación incluida en el repositorio.
 
+## Recursos
+
+[Terraform - AWS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+
 
 ## Alumnos
 
