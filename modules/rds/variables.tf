@@ -4,12 +4,12 @@ variable "db_sg_id" {
 }
 
 # VPC
-variable "id_subnet_a" {
-  description = "ID del Security Group de subnet a"
+variable "id_subnet_a_private" {
+  description = "ID del Security Group de subnet a privada"
 }
 
-variable "id_subnet_b" {
-  description = "ID del Security Group de subnet b"
+variable "id_subnet_b_private" {
+  description = "ID del Security Group de subnet b privada"
 }
 
 # RDS
