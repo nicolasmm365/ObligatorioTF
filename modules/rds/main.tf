@@ -7,6 +7,7 @@ resource "aws_db_subnet_group" "obligatorio_db_subnet_group" {
 }
 
 resource "aws_db_instance" "obligatorio-db" {
+#  multi_az            = true                           # Se deja comentado, ya que no se cuenta con permisos suficientes
   allocated_storage    = var.rds_allocated_storage
   storage_type         = var.rds_storage_type
   engine               = var.rds_engine
