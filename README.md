@@ -10,7 +10,7 @@ Este proyecto tiene como objetivo migrar la infraestructura on-premise de una em
 
 La nueva arquitectura en AWS incluye los siguientes componentes:
 
-- Una Virtual Private Cloud (VPC) con subredes públicas en dos zonas de disponibilidad (us-east-1a y us-east-1b).
+- Una Virtual Private Cloud (VPC) con dos subredes públicas y dos subredes privadas, en dos zonas de disponibilidad (us-east-1a y us-east-1b).
 - Un Internet Gateway para proporcionar acceso a Internet.
 - Grupos de seguridad (Security Groups) para controlar el tráfico de entrada y salida.
 - Un Application Load Balancer (ALB) para distribuir el tráfico entre las instancias web.
@@ -70,7 +70,7 @@ Para implementar esta solución, necesitarás:
 
 ### VPC y Subredes
 - **VPC**: Una VPC con un CIDR block de `10.0.0.0/16`.
-- **Subredes**: Dos subredes públicas en las zonas de disponibilidad `us-east-1a` y `us-east-1b`.
+- **Subredes**: Dos subredes públicas (para los servidores web) y dos subredes privadas (para las bases de datos), en las zonas de disponibilidad `us-east-1a` y `us-east-1b`.
 
 ### Grupos de Seguridad
 - **Load Balancer Security Group**: Permite el tráfico HTTP entrante (puerto 80) desde cualquier IP para que los clientes puedan acceder a la pagina web del ecommerce.
@@ -83,8 +83,8 @@ Para implementar esta solución, necesitarás:
 - **Target Groups**: Grupos de destino para las instancias de aplicación, con chequeos de salud configurados.
 
 ### Instancias de Aplicación
-- **EC2 Instances**: Dos instancias `t2.micro` con Amazon Linux 2, cada una en una subred diferente. Configuradas para servir una aplicación PHP clonada desde un repositorio de GitHub.
-- **Auto Scalling Group**: Se encargará de en caso de falla de alguna de las instancias estas se vuelvan a crear respetando los parametros preestablecidos.
+- **EC2 Instances**: Dos instancias `t2.micro` con Amazon Linux 2, cada una en una subred diferente. Configuradas para servir una aplicación PHP clonada desde un repositorio de GitHub, que luego se modificara y almacenara en el EFS montado en ambas instancias.
+- **Auto Scalling Group**: Se encargará de que en caso de falla de alguna de las instancias, estas se vuelvan a crear respetando los parametros preestablecidos en el Launch Template.
 
 
 #### Repositorio de la Aplicación Web
@@ -92,10 +92,10 @@ https://github.com/adandrea8/php-ecommerce
 
 
 ### Base de Datos
-- **RDS MySQL Instance**: Una instancia `db.t3.micro` de MySQL con 20GB de almacenamiento.
+- **RDS MySQL Instance**: Una instancia `db.t3.micro` de MySQL con 20GB de almacenamiento, configurada con Multi-AZ en subredes privadas.
 
 ### Almacenamiento de Archivos
-- **EFS**: Sistema de archivos EFS con puntos de montaje en ambas subredes y políticas de backup habilitadas.
+- **EFS**: Sistema de archivos EFS con puntos de montaje en ambas subredes publicas y políticas de backup habilitadas.
 
 ## Modulos ##
 En los siguientes links se podra acceder a los distintos README en los cuales se encontrará una breve descripcion del funcionamiento del codigo desplegado en cada modulo.
