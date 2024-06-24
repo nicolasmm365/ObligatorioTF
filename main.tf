@@ -34,8 +34,8 @@ module "sg" {
 module "rds" {
   source                = "./modules/rds"
 
-  id_subnet_a           = module.vpc.id_subnet_a          # ID de la Subnet A
-  id_subnet_b           = module.vpc.id_subnet_b          # ID de la Subnet B
+  id_subnet_a_private   = module.vpc.id_subnet_a_private  # ID de la Subnet A
+  id_subnet_b_private   = module.vpc.id_subnet_b_private  # ID de la Subnet B
   db_sg_id              = module.sg.db_sg_id              # ID del SG de la base de datos
   rds_db_username       = var.rds_db_username             # Nombre de usuario de la base de datos RDS
   rds_db_password       = var.rds_db_password             # Contraseña de la base de datos RDS
@@ -48,7 +48,6 @@ module "rds" {
   rds_allocated_storage = var.rds_allocated_storage       # Almacenamiento asignado a RDS
 }
 
-
 module "efs" {
   source                = "./modules/efs"
 
@@ -56,7 +55,6 @@ module "efs" {
   id_subnet_b           = module.vpc.id_subnet_b          # ID de la Subnet B
   efs_sg_id             = module.sg.efs_sg_id             # ID del SG de EFS
   db_instance_arn       = module.rds.db_instance_arn      # ARN de la instancia de la base de datos
-
 }
 
 module "ec2" {
@@ -77,6 +75,4 @@ module "ec2" {
   subnet_b_cidr         = module.vpc.subnet_b_cidr        # CIDR de la Subnet B
   vpc_aws_az-a          = var.vpc_aws_az-a                # Zona de disponibilidad A
   vpc_aws_az-b          = var.vpc_aws_az-b                # Zona de disponibilidad B
-
 }
-
