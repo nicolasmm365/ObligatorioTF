@@ -16,8 +16,8 @@ En conjunto, estos recursos permiten la creación de una instancia de base de da
 - `db_sg_id`: ID del Security Group para la base de datos.
 - `rds_db_username`: Nombre de usuario para la base de datos.
 - `rds_db_password`: Contraseña para la base de datos.
-- `id_subnet_a`: ID de la Subnet A.
-- `id_subnet_b`: ID de la Subnet B.
+- `id_subnet_a_private`: ID de la Subnet A Privada.
+- `id_subnet_b_private`: ID de la Subnet B Privada.
 - `rds_instance_class`: Clase de instancia para RDS.
 - `rds_tag_name_db`: Tag para la base de datos.
 - `rds_db_name`: Nombre de la base de datos.
