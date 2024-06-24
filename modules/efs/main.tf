@@ -7,13 +7,13 @@ resource "aws_efs_file_system" "efs_obligatorio" {
 
 resource "aws_efs_mount_target" "efs_mount_a" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
-  subnet_id      = var.id_subnet_a #esta poniendo en cidr en vez del id
+  subnet_id      = var.id_subnet_a
   security_groups = [var.efs_sg_id]
 }
 
 resource "aws_efs_mount_target" "efs_mount_b" {
   file_system_id = aws_efs_file_system.efs_obligatorio.id
-  subnet_id      = var.id_subnet_b #esta poniendo en cidr en vez del id
+  subnet_id      = var.id_subnet_b
   security_groups = [var.efs_sg_id]
 }
 
@@ -38,8 +38,12 @@ resource "aws_backup_plan" "bk_plan" {
   }
 }
 
+data "aws_iam_role" "backup_service_role" {
+  name = "AWSServiceRoleForBackup"
+}
+
 resource "aws_backup_selection" "efs_selection" {
-  iam_role_arn = "arn:aws:iam::226297523630:role/aws-service-role/backup.amazonaws.com/AWSServiceRoleForBackup"
+  iam_role_arn = data.aws_iam_role.backup_service_role.arn
   name         = "efs_selection"
   plan_id      = aws_backup_plan.bk_plan.id
 
@@ -49,7 +53,7 @@ resource "aws_backup_selection" "efs_selection" {
 }
 
 resource "aws_backup_selection" "rds_selection" {
-  iam_role_arn = "arn:aws:iam::226297523630:role/aws-service-role/backup.amazonaws.com/AWSServiceRoleForBackup"
+  iam_role_arn = data.aws_iam_role.backup_service_role.arn
   name         = "rds_selection"
   plan_id      = aws_backup_plan.bk_plan.id
 
