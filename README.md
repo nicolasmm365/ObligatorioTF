@@ -97,17 +97,20 @@ https://github.com/adandrea8/php-ecommerce
 ### Almacenamiento de Archivos
 - **EFS**: Sistema de archivos EFS con puntos de montaje en ambas subredes publicas y políticas de backup habilitadas.
 
-## Modulos ##
-En los siguientes links se podra acceder a los distintos README en los cuales se encontrará una breve descripcion del funcionamiento del codigo desplegado en cada modulo.
+## Módulos ##
+En los siguientes links se podrá acceder a los distintos README en los cuales se encontrará una breve descripción del funcionamiento del código desplegado en cada módulo.
 
 
 |  Modulo  |  Descripción |
 |--|--|
 |  [EC2](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/ec2)  |  Despliegue de instancias EC2, load balancer, auto scalling group, etc. |
-|  [EFS](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/efs)  | Despliegue del file system y la creacion del backup vault.   |
+|  [EFS](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/efs)  | Despliegue del file system y la creación del backup vault.   |
 |[RDS](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/rds) | Despliegue de la instancia de base de datos RDS con motor MySQL.|
-| [SG](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/sg) | Despliegue de los Security Groups necesarios para la comunicacion entre los recursos.|
+| [SG](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/sg) | Despliegue de los Security Groups necesarios para la comunicación entre los recursos.|
 |  [VPC](https://github.com/nicolasmm365/ObligatorioTF/blob/main/modules/vpc) | Despliegue de todo lo relacionado con la red.
+
+En este caso todos los módulos dependen implícitamente uno de otro, con excepción del VPC, que será el primer módulo en ser creado.
+Por lo cual se podría utilizarlo con otros fines sin depender de los otros. Como por ejemplo crear varias instancias y distribuirlas entre las 4 subnets que crea este módulo. Siempre teniendo en cuenta que las variables que se vayan a utilizar en el main.tf, deben ser invocadas con el código `module.<nombre del módulo>.<nombre de la variable exportada>` si son exportadas de otro módulo, de lo contrario, deben estar definidas en variables.tf y declaradas en terraform.tfvars. Como se muestra en el siguiente [ejemplo](https://github.com/nicolasmm365/ObligatorioTF/blob/main/ejemplo).
 
 ## Colaboración y Buenas Prácticas
 
